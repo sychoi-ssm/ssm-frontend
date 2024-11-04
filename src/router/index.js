@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import { AdminLayout, StudentLayout } from '@/layouts'
+import { BaseWrapper, StudentLayout } from '@/layouts'
 import LoginView from '@/views/login/LoginView.vue'
 
 const AuthLevels = {
@@ -17,27 +17,40 @@ const router = createRouter({
       component: LoginView
     },
     {
-      path: '/admin',
-      component: AdminLayout, // 네비게이션이 포함된 레이아웃
+      path: '/',
+      component: BaseWrapper, // 네비게이션이 포함된 레이아웃
       meta: { requiresAuth: AuthLevels.ADMIN }, // 로그인 필요
       children: [
         {
-          path: 'students',
-          component: StudentLayout,
-          meta: { requiresAuth: AuthLevels.ADMIN },
-          redirect: 'admin/students/list',
+          path: 'grades',
+          redirect: '/grades',
           children: [
             {
-              path: 'list',
-              name: 'StudentList',
-              component: () => import('@/views/admin/students/StudentListView.vue'),
-              meta: { requiresAuth: AuthLevels.ADMIN }
-            },
+              path: '',
+              component: () => import('@/views/students/StudentDetailView.vue'),
+              name: 'Grades'
+            }
+          ]
+        },
+        {
+          path: 'settings',
+          redirect: '/settings',
+          children: [
             {
-              path: 'detail/:id',
-              name: 'StudentDetail',
-              component: () => import('@/views/admin/students/StudentDetailView.vue'),
-              meta: { requiresAuth: AuthLevels.ADMIN }
+              path: '',
+              component: () => import('@/views/students/StudentDetailView.vue'),
+              name: 'Settings'
+            }
+          ]
+        },
+        {
+          path: 'students',
+          redirect: 'students',
+          children: [
+            {
+              path: '',
+              name: 'Students',
+              component: () => import('@/views/students/StudentView.vue')
             }
           ]
         }

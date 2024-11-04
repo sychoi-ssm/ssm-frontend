@@ -1,4 +1,4 @@
-import AdminLayout from './AdminLayout.vue'
+import BaseWrapper from './BaseWrapper.vue'
 import StudentLayout from './StudentLayout.vue'
 
-export { AdminLayout, StudentLayout }
+export { BaseWrapper, StudentLayout }

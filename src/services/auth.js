@@ -45,6 +45,11 @@ async function login(user) {
   return { success: true }
 }
 
+function logout() {
+  console.log('로그아웃 성공')
+  localStorage.removeItem('ssm_rt')
+}
+
 async function authenticateToken() {
   const { accessToken } = useTokenStore()
   const refreshToken = getRefreshToken()
@@ -63,6 +68,7 @@ async function authenticateToken() {
 
 const AuthManager = {
   login: async (user) => await login(user),
+  logout: () => logout(),
   authenticateToken: async () => await authenticateToken()
 }
 
