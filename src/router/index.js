@@ -50,7 +50,7 @@ const router = createRouter({
             {
               path: '',
               name: 'Students',
-              component: () => import('@/views/students/StudentView.vue')
+              component: () => import('@/modules/students/views/StudentListView.vue')
             }
           ]
         }
