@@ -6,6 +6,7 @@ import { SCard } from '@/components/index.js'
 import { StudentLayout } from '@/layouts/index.js'
 import { ApiClient } from '@/services/api.js'
 
+import StudentDataTable from '../components/StudentDataTable.vue'
 import StudentSearchList from '../components/StudentSearchList.vue'
 
 const url = 'https://reqres.in/api/users?page=1'
@@ -25,18 +26,18 @@ const headers = [
   { title: '과목', value: 'subject' },
   {
     title: '1학기',
-    align: 'left',
+    align: 'center',
     children: [
-      { title: '중간', value: 'q1' },
-      { title: '기말', value: 'q2' }
+      { title: '중간', align: 'center', value: 'q1' },
+      { title: '기말', align: 'center', value: 'q2' }
     ]
   },
   {
     title: '2학기',
-    align: 'left',
+    align: 'center',
     children: [
-      { title: '중간', value: 'q3' },
-      { title: '기말', value: 'q4' }
+      { title: '중간', align: 'center', value: 'q3' },
+      { title: '기말', align: 'center', value: 'q4' }
     ]
   }
 ]
@@ -87,7 +88,9 @@ const items = [
 </script>
 <template>
   <div class="student-layout-container">
-    <section class="bg-white shadow-neutral-300 shadow-md rounded-lg h-full w-[200px]">
+    <section
+      class="bg-white shadow-neutral-300 shadow-md rounded-lg h-full sm:w-[200px] hidden lg:block"
+    >
       <StudentSearchList @click="(i) => console.log(i)" />
     </section>
     <!--    <div class="grow">-->
@@ -107,17 +110,11 @@ const items = [
         </section>
       </div>
 
-      <div class="grow flex gap-2">
+      <div class="grow flex flex-col sm:flex-row gap-2">
         <div class="grow">
-          <div class="bg-grey rounded-lg h-full">
-            <!--            <v-img-->
-            <!--              width="600"-->
-            <!--              class="bg-grey-lighten-2 h-full"-->
-            <!--              src="https://picsum.photos/350/165?random"-->
-            <!--            ></v-img>-->
-          </div>
+          <div class="bg-grey rounded-lg h-full"></div>
         </div>
-        <div class="w-[260px]">
+        <div class="sm:w-[260px] w-full">
           <div
             class="bg-white shadow-neutral-300 shadow-md rounded-lg text-sm grow h-full px-4 py-2"
           >
@@ -137,70 +134,24 @@ const items = [
         </div>
       </div>
 
-      <div class="h-[260px] flex gap-2">
+      <div class="h-[260px] flex flex-col sm:flex-row gap-2">
         <div class="flex-1">
           <div
             class="bg-white shadow-neutral-300 overflow-auto shadow-md rounded-lg text-sm h-full px-4 py-2"
           >
             <div class="font-semibold mb-2 text-base">23년 내신</div>
             <div class="w-[90%]">
-              <v-data-table
-                class="ssm-v-data-table"
-                :headers="headers"
-                :items="items"
-                item-key="name"
-                density="compact"
-                hide-default-footer
-              >
-                <template #body="{ items }">
-                  <tr
-                    v-for="(item, index) in items"
-                    :key="index"
-                    class="text-xs"
-                    :class="index % 2 === 0 ? 'bg-[#E9ECF0]' : ''"
-                  >
-                    <td class="border-0" :class="index === 0 ? 'font-bold' : ''">
-                      {{ item.subject }}
-                    </td>
-                    <td class="border-0" :class="index === 0 ? 'font-bold' : ''">{{ item.q1 }}</td>
-                    <td class="border-0" :class="index === 0 ? 'font-bold' : ''">{{ item.q2 }}</td>
-                    <td class="border-0" :class="index === 0 ? 'font-bold' : ''">{{ item.q3 }}</td>
-                    <td class="border-0" :class="index === 0 ? 'font-bold' : ''">{{ item.q4 }}</td>
-                  </tr>
-                </template>
-              </v-data-table>
+              <StudentDataTable :headers="headers" :items="items" />
             </div>
           </div>
         </div>
         <div class="flex-1">
-          <div class="bg-white shadow-neutral-300 shadow-md rounded-lg text-sm h-full px-4 py-2">
+          <div
+            class="bg-white shadow-neutral-300 overflow-auto shadow-md rounded-lg text-sm h-full px-4 py-2"
+          >
             <div class="font-semibold mb-2 text-base">23년 모의고사</div>
             <div class="w-[90%]">
-              <v-data-table
-                class="ssm-v-data-table"
-                :headers="headers"
-                :items="items"
-                item-key="name"
-                density="compact"
-                hide-default-footer
-              >
-                <template #body="{ items }">
-                  <tr
-                    v-for="(item, index) in items"
-                    :key="index"
-                    class="text-xs"
-                    :class="index % 2 === 0 ? 'bg-[#E9ECF0]' : ''"
-                  >
-                    <td class="border-0" :class="index === 0 ? 'font-bold' : ''">
-                      {{ item.subject }}
-                    </td>
-                    <td class="border-0" :class="index === 0 ? 'font-bold' : ''">{{ item.q1 }}</td>
-                    <td class="border-0" :class="index === 0 ? 'font-bold' : ''">{{ item.q2 }}</td>
-                    <td class="border-0" :class="index === 0 ? 'font-bold' : ''">{{ item.q3 }}</td>
-                    <td class="border-0" :class="index === 0 ? 'font-bold' : ''">{{ item.q4 }}</td>
-                  </tr>
-                </template>
-              </v-data-table>
+              <StudentDataTable :headers="headers" :items="items" />
             </div>
           </div>
         </div>
@@ -215,15 +166,8 @@ const items = [
   gap: 0.5rem;
   height: calc(100vh - 110px);
   min-height: 500px;
-  min-width: 900px;
+  min-width: 320px;
   padding: 0 2rem;
-}
-.grid-container {
-  display: grid;
-  grid-template-rows: 52px 1fr 200px; /* 첫 번째 행 44px, 세 번째 행 200px, 가운데 행은 남은 공간 채움 */
-  height: calc(100vh - 110px); /* 전체 컨테이너의 높이 설정 */
-  min-height: 400px;
-  gap: 0.5rem;
 }
 </style>
 
@@ -231,5 +175,13 @@ const items = [
 .ssm-v-data-table.v-table--density-compact {
   --v-table-header-height: 32px;
   --v-table-row-height: 24px;
+}
+.v-table > .v-table__wrapper > table > tbody > tr > td,
+.v-table > .v-table__wrapper > table > tbody > tr > th,
+.v-table > .v-table__wrapper > table > thead > tr > td,
+.v-table > .v-table__wrapper > table > thead > tr > th,
+.v-table > .v-table__wrapper > table > tfoot > tr > td,
+.v-table > .v-table__wrapper > table > tfoot > tr > th {
+  padding: 0;
 }
 </style>

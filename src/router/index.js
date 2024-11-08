@@ -27,7 +27,7 @@ const router = createRouter({
           children: [
             {
               path: '',
-              component: () => import('@/views/students/StudentDetailView.vue'),
+              component: () => import('@/modules/grade/views/GradeView.vue'),
               name: 'Grades'
             }
           ]
@@ -38,7 +38,7 @@ const router = createRouter({
           children: [
             {
               path: '',
-              component: () => import('@/views/students/StudentDetailView.vue'),
+              component: () => import('@/modules/student/views/StudentDetailView.vue'),
               name: 'Settings'
             }
           ]
@@ -50,7 +50,7 @@ const router = createRouter({
             {
               path: '',
               name: 'Students',
-              component: () => import('@/modules/students/views/StudentListView.vue')
+              component: () => import('@/modules/student/views/StudentListView.vue')
             }
           ]
         }
