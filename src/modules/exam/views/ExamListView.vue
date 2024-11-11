@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref } from 'vue'
+import { onBeforeUnmount, reactive, ref, watch } from 'vue'
 import { onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -94,18 +94,18 @@ const selections = reactive({
   term: ref()
 })
 
-function onFilterUpdate(filters) {
+function onFilterUpdate() {
   pushRouteQuery()
   search()
 }
 
 function pushRouteQuery() {
-  // filters를 query로 변환
+  // filters를 query로 변환 후 주소 이동
   const query = {}
-  Object.keys(filters).forEach((k) => {
-    if (filters[k] && filters[k].length > 0) {
+  Object.keys(selections).forEach((k) => {
+    if (selections[k]?.length > 0) {
       // filter가 있다면, value를 추출 ex) { title: '2021년', value: '2021' }
-      query[k] = filters[k].map((v) => v.value)
+      query[k] = selections[k].map((v) => v.value)
     }
   })
   router.push({
@@ -113,12 +113,15 @@ function pushRouteQuery() {
     query: query
   })
 }
-function parseRouteQuery() {
+
+function parseRouteQuery(query) {
   // query에서 filter 추출. query값을 기반으로 selection 저장
   // selection은 subset of filters.data
-  Object.keys(route.query).forEach((k) => {
-    if (k in selections) {
-      selections[k] = filters[k].data.filter((f) => route.query[k].includes(f.value))
+  Object.keys(selections).forEach((k) => {
+    if (k in query) {
+      selections[k] = filters[k].data.filter((f) => query[k].includes(f.value))
+    } else {
+      selections[k] = []
     }
   })
 }
@@ -135,29 +138,79 @@ function search() {
       examId: 2,
       studentCount: 15,
       averageScore: 87.2
+    },
+    {
+      name: '2024년 고등학교 1학년 1학기 중간 내신',
+      examId: 3,
+      studentCount: 15,
+      averageScore: 89.2
+    },
+    {
+      name: '2024년 고등학교 1학년 1학기 기말 내신',
+      examId: 4,
+      studentCount: 15,
+      averageScore: 87.2
+    },
+    {
+      name: '2024년 고등학교 1학년 1학기 중간 내신',
+      examId: 5,
+      studentCount: 15,
+      averageScore: 89.2
+    },
+    {
+      name: '2024년 고등학교 1학년 1학기 기말 내신',
+      examId: 6,
+      studentCount: 15,
+      averageScore: 87.2
+    },
+    {
+      name: '2024년 고등학교 1학년 1학기 중간 내신',
+      examId: 7,
+      studentCount: 15,
+      averageScore: 89.2
+    },
+    {
+      name: '2024년 고등학교 1학년 1학기 기말 내신',
+      examId: 8,
+      studentCount: 15,
+      averageScore: 87.2
     }
   ]
 }
 
 //TODO : 라우트 이동하기 전, 또는 쿼리 변경 시마다로 업데이트
 onMounted(() => {
-  parseRouteQuery()
+  parseRouteQuery(route?.query)
   search()
+})
+
+const watchRoute = watch(
+  () => route?.query,
+  (newQuery) => {
+    parseRouteQuery(newQuery)
+    search()
+  }
+)
+onBeforeUnmount(() => {
+  watchRoute()
 })
 </script>
 
 <template>
-  <div class="flex">
-    <section>
-      <div class="text-2xl font-semibold mb-3">시험 목록</div>
-      <ExamFilter
-        class="mb-6"
-        :selections="selections"
-        :filters="filters"
-        clearable
-        @update:deferred="(f) => onFilterUpdate(f)"
-      />
-      <ExamList :exams="exams" />
-    </section>
+  <div class="flex flex-col">
+    <div class="h-[36px] text-2xl font-semibold mb-3">시험 목록</div>
+    <ExamFilter
+      :selections="selections"
+      :filters="filters"
+      clearable
+      @update:deferred="(f) => onFilterUpdate(f)"
+    />
+    <ExamList class="exam-list-container w-full flex flex-col" :exams="exams" />
   </div>
 </template>
+
+<style scoped>
+.exam-list-container {
+  max-height: calc(100vh - 300px);
+}
+</style>

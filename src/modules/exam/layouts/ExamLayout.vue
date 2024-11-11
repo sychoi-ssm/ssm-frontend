@@ -10,8 +10,8 @@ const sidebarItems = [
 </script>
 
 <template>
-  <div class="flex gap-[40px] mt-[60px]">
-    <section>
+  <div class="flex gap-[32px] md:mt-[40px] min-w-[320px] exam-layout-container">
+    <section class="hidden sm:block">
       <ExamSidebar :items="sidebarItems" />
     </section>
     <section>
@@ -20,4 +20,7 @@ const sidebarItems = [
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.exam-layout-container {
+}
+</style>

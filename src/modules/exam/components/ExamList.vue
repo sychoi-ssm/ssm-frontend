@@ -6,33 +6,51 @@ const props = defineProps({ exams: Array })
 
 <template>
   <div>
-    <div :style="{ color: Colors.text.hint }" class="flex">
-      <div class="text-left w-[400px]">
-        검색된 시험<span v-if="exams?.length > 0"> ・ {{ exams.length }}개</span>
+    <div class="pr-3">
+      <div
+        class="exam-list-grid-header grid grid-cols-6 p-2 sticky top-0 text-center border-b-[1px] border-b-neutral-200 bg-[#ffffff]"
+        :style="{ color: Colors.text.hint }"
+      >
+        <div class="col-span-4 text-left px-4">
+          <span>검색된 시험</span>
+          <span v-if="exams?.length > 0"> ・ {{ exams.length }}개</span>
+        </div>
+        <div class="col-span-1 text-no-wrap">학생 수</div>
+        <div class="col-span-1 text-no-wrap">평균 성적</div>
       </div>
-      <div class="text-right text-nowrap">학생 수</div>
-      <div class="text-right text-nowrap">평균 성적</div>
     </div>
-    <div class="flex flex-col w-full">
+    <div class="overflow-y-auto exam-list-grid-body pt-2">
       <RouterLink
         :to="{ name: 'ExamDetail', params: { id: exam.examId } }"
         v-for="(exam, i) in exams"
         :key="exam.name"
-        class="cursor-pointer hover:font-semibold flex w-full"
+        class="grid grid-cols-6 text-center p-2 cursor-pointer hover:font-semibold hover:bg-neutral-100 rounded-lg"
+        :style="{ color: Colors.text.base }"
       >
-        <div class="border-0">
-          <span class="ml-2 mr-6" :style="{ color: Colors.text.primary }">{{ i + 1 }}</span>
-          <span>{{ exam.name }}</span>
+        <div class="col-span-4 px-4">
+          <div class="flex items-center">
+            <span class="ml-2 mr-6" :style="{ color: Colors.text.primary }">{{ i + 1 }}</span>
+            <span>{{ exam.name }}</span>
+          </div>
         </div>
-        <div class="border-0 text-right">
+        <div class="col-span-1">
           <span>{{ exam.studentCount }}</span>
         </div>
-        <div class="border-0 text-right">
-          <span class="mr-2">{{ exam.averageScore }}</span>
+        <div class="col-span-1">
+          <span>{{ exam.averageScore }}</span>
         </div>
       </RouterLink>
     </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.exam-list-grid-header {
+  box-shadow: 0 4px 5px rgba(255, 255, 255, 0.8);
+  min-height: 36px;
+}
+.exam-list-grid-body {
+  scrollbar-gutter: stable;
+  flex-grow: 1;
+}
+</style>
