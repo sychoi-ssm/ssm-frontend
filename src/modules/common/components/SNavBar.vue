@@ -6,7 +6,7 @@ import SearchModal from './SearchDialog.vue'
 
 const menus = [
   { name: 'Students', title: '학생관리' },
-  { name: 'Exams', title: '시험관리' },
+  { name: 'ExamList', title: '시험관리' },
   { name: 'Settings', title: '기본설정' }
 ]
 

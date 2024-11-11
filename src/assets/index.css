@@ -6,5 +6,6 @@
 @tailwind utilities;
 
 * {
-    font-family: 'Toss Product Sans';
+  font-family: 'Toss Product Sans';
+  font-size: 13px;
 }

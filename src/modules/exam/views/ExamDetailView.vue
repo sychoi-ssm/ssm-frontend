@@ -1,5 +1,5 @@
 <script setup></script>
 
-<template></template>
+<template>시험상세</template>
 
 <style scoped></style>

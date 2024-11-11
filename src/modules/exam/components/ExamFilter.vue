@@ -29,7 +29,7 @@ function onClearSelections() {
 </script>
 
 <template>
-  <div class="flex items-center gap-1">
+  <div class="flex items-center gap-2 flex-wrap">
     <FilterChip
       :model-value="selections[filter.name]"
       @update:model-value="(d) => handleFilterChipUpdate(filter.name, d)"
@@ -41,7 +41,7 @@ function onClearSelections() {
     />
     <div v-if="clearable" @click="onClearSelections" class="cursor-pointer">
       <span
-        class="text-sm hover:opacity-100 opacity-[0.7] flex items-center"
+        class="text-sm hover:opacity-100 opacity-[0.7] flex items-center text-nowrap"
         :style="{ color: Colors.text.base }"
       >
         초기화

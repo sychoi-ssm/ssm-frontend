@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import LoginView from '@/views/login/LoginView.vue'
-import { BaseLayout } from '@layouts'
+import { BaseLayout, ExamLayout } from '@layouts'
 
 const AuthLevels = {
   USER: 1,
@@ -24,11 +24,26 @@ const router = createRouter({
         {
           path: 'exams',
           redirect: '/exams',
+          component: ExamLayout,
           children: [
             {
               path: '',
-              component: () => import('@/modules/exam/views/ExamView.vue'),
-              name: 'Exams'
+              component: () => import('@/modules/exam/views/ExamListView.vue'),
+              name: 'ExamList',
+              meta: { parent: 'ExamList' },
+              props: (route) => ({ filters: route.query })
+            },
+            {
+              path: ':id',
+              component: () => import('@/modules/exam/views/ExamDetailView.vue'),
+              name: 'ExamDetail',
+              meta: { parent: 'ExamList' }
+            },
+            {
+              path: 'mass-registration',
+              component: () => import('@/modules/exam/views/ExamMassRegistrationView.vue'),
+              name: 'ExamMassRegistration',
+              meta: { parent: 'ExamMassRegistration' }
             }
           ]
         },

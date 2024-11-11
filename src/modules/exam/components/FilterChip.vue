@@ -14,10 +14,6 @@ const props = defineProps({
 })
 const emit = defineEmits(['click', 'update:modelValue'])
 
-function handleClick() {
-  emit('click', settingsSelection.value)
-}
-
 function onUpdateModelValue(value) {
   emit('update:modelValue', value)
 }
@@ -55,9 +51,13 @@ const someSelected = computed(() => {
         variant="flat"
         @click="settingsMenu.onClick"
       >
-        <span :style="{ color: someSelected ? Colors.text.primary : Colors.text.base }">{{
-          selectionText
-        }}</span>
+        <span
+          class="flex items-center ml-1"
+          :style="{ color: someSelected ? Colors.text.primary : Colors.text.base }"
+        >
+          {{ selectionText }}
+          <v-icon size="14" class="opacity-80" icon="mdi-chevron-down" />
+        </span>
       </v-chip>
     </template>
     <v-list
@@ -66,7 +66,7 @@ const someSelected = computed(() => {
       :select-strategy="multiple ? 'leaf' : 'single-leaf'"
       class="mt-1"
     >
-      <v-list-subheader>{{ props.name }}</v-list-subheader>
+      <v-list-subheader> {{ props.name }}</v-list-subheader>
       <v-list-item
         v-for="item in props.items"
         :key="item.value"
