@@ -2,8 +2,6 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { SCard } from '@/components/index.js'
-import { StudentLayout } from '@/layouts/index.js'
 import { ApiClient } from '@/services/api.js'
 
 const url = 'https://reqres.in/api/users?page=1'

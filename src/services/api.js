@@ -1,4 +1,4 @@
-import { SsmException } from '@/commons/exceptions'
+import { SsmException } from '@/modules/common/exceptions'
 import axios from 'axios'
 
 const baseInstance = axios.create({

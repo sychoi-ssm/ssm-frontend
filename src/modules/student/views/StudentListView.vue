@@ -2,8 +2,6 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { SCard } from '@/components/index.js'
-import { StudentLayout } from '@/layouts/index.js'
 import { ApiClient } from '@/services/api.js'
 
 import StudentDataTable from '../components/StudentDataTable.vue'
@@ -23,7 +21,7 @@ function toStudent(id) {
   router.push({ name: 'StudentDetail', params: { id: id } })
 }
 const headers = [
-  { title: '과목', value: 'subject' },
+  { title: '과목', align: 'center', value: 'subject' },
   {
     title: '1학기',
     align: 'center',

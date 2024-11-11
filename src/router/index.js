@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import { BaseWrapper, StudentLayout } from '@/layouts'
 import LoginView from '@/views/login/LoginView.vue'
+import { BaseLayout } from '@layouts'
 
 const AuthLevels = {
   USER: 1,
@@ -18,17 +18,17 @@ const router = createRouter({
     },
     {
       path: '/',
-      component: BaseWrapper, // 네비게이션이 포함된 레이아웃
+      component: BaseLayout, // 네비게이션이 포함된 레이아웃
       meta: { requiresAuth: AuthLevels.ADMIN }, // 로그인 필요
       children: [
         {
-          path: 'grades',
-          redirect: '/grades',
+          path: 'exams',
+          redirect: '/exams',
           children: [
             {
               path: '',
-              component: () => import('@/modules/grade/views/GradeView.vue'),
-              name: 'Grades'
+              component: () => import('@/modules/exam/views/ExamView.vue'),
+              name: 'Exams'
             }
           ]
         },

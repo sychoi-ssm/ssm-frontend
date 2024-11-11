@@ -18,8 +18,8 @@ const props = defineProps({
       <VAvatar color="grey" size="32" :image="student?.profileImageUrl"></VAvatar>
     </div>
     <div class="flex flex-col text-base">
-      <span>김승열</span>
-      <span class="text-xs text-neutral-500">가평고1</span>
+      <span>{{ student.name }}</span>
+      <span class="text-xs text-neutral-500">{{ student.class }}</span>
     </div>
   </div>
 </template>

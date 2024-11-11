@@ -1,11 +1,12 @@
 <script setup>
-import NavBarProfile from '@/components/common/NavBarProfile.vue'
-import SearchModal from '@/components/common/SearchDialog.vue'
-import AuthManager from '@/services/auth.js'
+import SNavBarProfile from './SNavBarProfile.vue'
+import SearchModal from './SearchDialog.vue'
+
+// import AuthManager from '@/services/auth.js'
 
 const menus = [
   { name: 'Students', title: '학생관리' },
-  { name: 'Grades', title: '성적관리' },
+  { name: 'Exams', title: '시험관리' },
   { name: 'Settings', title: '기본설정' }
 ]
 
@@ -28,7 +29,7 @@ const props = defineProps({
         <SearchModal />
       </div>
       <div>
-        <NavBarProfile />
+        <SNavBarProfile />
       </div>
     </div>
   </v-app-bar>
