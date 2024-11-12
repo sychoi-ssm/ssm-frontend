@@ -1,5 +1,134 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue'
+import { reactive } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
-<template>시험상세</template>
+import { Colors } from '@utils'
+
+import ExamDeleteCard from '../components/ExamDeleteCard.vue'
+import ExamDetailResultList from '../components/ExamDetailResultList.vue'
+import ExamDialog from '../components/ExamDialog.vue'
+import ExamReportCard from '../components/ExamReportCard.vue'
+
+const props = defineProps({})
+
+const route = useRoute()
+const router = useRouter()
+
+const config = reactive({
+  menu: {
+    items: ['학생 성적', '반 평균', '반 편차'],
+    current: ref('학생 성적')
+  },
+  modal: {
+    open: ref(false),
+    current: ref(null),
+    opacity: ref(0.33)
+  },
+  data: {
+    examReport: ref(null)
+  }
+})
+const setSubMenu = (m) => {
+  config.menu.current = m
+}
+const examData = {
+  title: '2024년 고등학교 1학년 내신',
+  subtitle: '1학기 중간고사',
+  results: [
+    {
+      examDtlSeq: 1,
+      name: '김승열',
+      class: '가평고1',
+      scores: { 국어: 88, 영어: 87, 수학: 87, 사회: 87, 과학: 87 }
+    },
+    {
+      examDtlSeq: 2,
+      name: '김승열',
+      class: '가평고1',
+      scores: { 국어: 88, 영어: 87, 수학: 87, 사회: 87, 과학: 87 }
+    }
+  ]
+}
+
+function historyBack() {
+  router.go(-1)
+}
+
+function handleExamDetailItemClick(data) {
+  config.data.examReport = data
+  openModal('exam-report')
+}
+
+function openModal(currentModal) {
+  config.modal.current = currentModal
+  config.modal.opacity = currentModal === 'exam-report' ? '0.33' : '0'
+  config.modal.open = true
+}
+
+function closeModal() {
+  config.modal.current = null
+  config.modal.open = false
+}
+</script>
+
+<template>
+  <div class="flex flex-col w-full pr-4 max-w-[720px] gap-3">
+    <section class="min-h-[58px]">
+      <div class="flex justify-between items-center">
+        <span class="text-2xl font-semibold" :style="{ color: Colors.text.strong }">
+          {{ examData.title }}
+        </span>
+        <span>
+          <v-btn
+            density="compact"
+            icon="mdi-arrow-left"
+            variant="text"
+            :ripple="false"
+            :color="Colors.text.hint"
+            @click="historyBack()"
+          />
+        </span>
+      </div>
+      <div class="text-base" :style="{ color: Colors.text.base }">{{ examData.subtitle }}</div>
+    </section>
+    <section class="min-h-[32px]">
+      <div class="flex gap-1">
+        <v-chip
+          v-for="subMenu in config.menu.items"
+          :key="subMenu"
+          class="cursor-pointer"
+          :color="subMenu === config.menu.current ? Colors.bg.base : 'transparent'"
+          variant="flat"
+          @click="setSubMenu(subMenu)"
+          :ripple="false"
+        >
+          <span
+            class="flex items-center"
+            :style="{
+              color: subMenu === config.menu.current ? Colors.text.base : Colors.text.base
+            }"
+          >
+            {{ subMenu }}
+          </span>
+        </v-chip>
+      </div>
+    </section>
+    <section class="mt-3">
+      <ExamDetailResultList
+        v-if="config.menu.current === '학생 성적'"
+        :exam-data="examData"
+        @click="(i) => handleExamDetailItemClick(i)"
+      />
+      <div v-else class="flex justify-center text-neutral-600">
+        <div>준비중입니다...</div>
+      </div>
+    </section>
+  </div>
+  <ExamDialog v-model="config.modal.open" :opacity="config.modal.opacity">
+    <ExamReportCard v-if="config.modal.current === 'exam-report'" :data="config.data.examReport" />
+    <ExamDeleteCard v-if="config.modal.current === 'delete-exam-detail'" />
+  </ExamDialog>
+</template>
 
 <style scoped></style>

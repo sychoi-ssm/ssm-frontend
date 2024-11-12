@@ -10,17 +10,14 @@ const sidebarItems = [
 </script>
 
 <template>
-  <div class="flex gap-[32px] md:mt-[40px] min-w-[320px] exam-layout-container">
+  <div class="flex gap-[32px] md:mt-[40px] min-w-[320px] w-full">
     <section class="hidden sm:block">
       <ExamSidebar :items="sidebarItems" />
     </section>
-    <section>
+    <section class="flex-1">
       <RouterView />
     </section>
   </div>
 </template>
 
-<style scoped>
-.exam-layout-container {
-}
-</style>
+<style scoped></style>

@@ -9,3 +9,7 @@
   font-family: 'Toss Product Sans';
   font-size: 13px;
 }
+
+.scrollbar-gutter-stable {
+  scrollbar-gutter: stable;
+}

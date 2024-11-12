@@ -197,7 +197,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="flex flex-col">
+  <div class="flex flex-col w-full pr-4 max-w-[720px]">
     <div class="h-[36px] text-2xl font-semibold mb-3">시험 목록</div>
     <ExamFilter
       :selections="selections"
