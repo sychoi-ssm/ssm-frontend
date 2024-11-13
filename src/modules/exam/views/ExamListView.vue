@@ -140,7 +140,7 @@ function onClickAddNew() {
 }
 
 // 검색창 Typing은 debounce로 함수를 실행하는데, 이 때 Typing 한 순간 loading을 작동하게 만드는 함수
-function onSearchTriggered() {
+function onBeforeSearchUpdate() {
   loading.search = true
 }
 
@@ -224,7 +224,7 @@ onBeforeUnmount(() => {
   <div class="flex flex-col w-full pr-4 max-w-[720px]">
     <div class="h-[36px] text-2xl font-semibold mb-3">시험 목록</div>
     <ExamSearchBar
-      @update:before="onSearchTriggered"
+      @update:before="onBeforeSearchUpdate"
       @update="(searchText) => onSearchTextUpdate(searchText)"
       @click:add="onClickAddNew"
       class="mb-2"

@@ -52,7 +52,7 @@ const onSearchTextUpdate = () => {
       height="100%"
       :ripple="false"
     >
-      <span>New</span>
+      <span>추가하기</span>
     </v-btn>
   </div>
 </template>

@@ -10,6 +10,7 @@ import ExamDetailEditCard from '../components/ExamDetailEditCard.vue'
 import ExamDetailResultList from '../components/ExamDetailResultList.vue'
 import ExamDialog from '../components/ExamDialog.vue'
 import ExamReportCard from '../components/ExamReportCard.vue'
+import ExamSearchBar from '../components/ExamSearchBar.vue'
 
 const props = defineProps({})
 
@@ -28,6 +29,9 @@ const config = reactive({
   },
   data: {
     examReport: ref(null)
+  },
+  loading: {
+    search: ref(false)
   }
 })
 const setSubMenu = (m) => {
@@ -78,6 +82,21 @@ function closeModal() {
   config.modal.current = null
   config.modal.open = false
 }
+
+function onClickAddNew() {
+  console.log('추가하기!')
+}
+
+// 검색창 Typing은 debounce로 함수를 실행하는데, 이 때 Typing 한 순간 loading을 작동하게 만드는 함수
+function onBeforeSearchUpdate() {
+  config.loading.search = true
+}
+
+function onSearchTextUpdate() {
+  setTimeout(() => {
+    config.loading.search = false
+  }, 1000)
+}
 </script>
 
 <template>
@@ -99,6 +118,15 @@ function closeModal() {
         </span>
       </div>
       <div class="text-base" :style="{ color: Colors.text.base }">{{ examData.subtitle }}</div>
+    </section>
+    <section>
+      <ExamSearchBar
+        @update:before="onBeforeSearchUpdate"
+        @update="(searchText) => onSearchTextUpdate(searchText)"
+        @click:add="onClickAddNew"
+        class="mb-2"
+        :loading="config.loading.search"
+      />
     </section>
     <section class="min-h-[32px]">
       <div class="flex gap-1">
