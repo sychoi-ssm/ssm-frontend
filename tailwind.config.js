@@ -25,7 +25,15 @@ export default {
       '4xl': '20px',
       full: '9999px'
     },
-    extend: {}
+    extend: {
+      boxShadow: {
+        'all-sm': '0 0 4px rgba(0, 0, 0, 0.1)',
+        all: '0 0 8px rgba(0, 0, 0, 0.12)',
+        'all-md': '0 0 12px rgba(0, 0, 0, 0.3)',
+        'all-lg': '0 0 16px rgba(0, 0, 0, 0.4)',
+        'all-xl': '0 0 24px rgba(0, 0, 0, 0.5)'
+      }
+    }
   },
   plugins: []
 }

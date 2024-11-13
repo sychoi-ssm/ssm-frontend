@@ -47,7 +47,7 @@ const someSelected = computed(() => {
     <template v-slot:activator="{ props: settingsMenu }">
       <v-chip
         class="cursor-pointer"
-        :color="someSelected ? Colors.bg.primary : Colors.bg.base"
+        :color="someSelected ? Colors.bg.primaryLight : Colors.bg.base"
         variant="flat"
         @click="settingsMenu.onClick"
       >

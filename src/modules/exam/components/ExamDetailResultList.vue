@@ -1,17 +1,24 @@
 <script setup>
+import { reactive, ref } from 'vue'
+
 import { Colors } from '@utils'
 
 const props = defineProps({
   examData: Object
 })
-const emit = defineEmits(['click'])
+const emit = defineEmits(['click:item', 'click:edit', 'click:delete'])
+
+const config = reactive({
+  examId: ref(),
+  examDtlSeq: ref()
+})
 
 function handleEmit(exam) {
   const data = {
     examId: 1,
     examSeq: exam.examDtlSeq
   }
-  emit('click', data)
+  emit('click:item', data)
 }
 
 function calculateAverage(scores) {
@@ -21,9 +28,25 @@ function calculateAverage(scores) {
   return Math.round(average * 10) / 10
 }
 
-function handleExamDetailEdit(e) {
-  console.log(e)
+function handleExamDetailEditPopup(e, menuProps) {
   e.stopImmediatePropagation()
+  menuProps.onClick(e)
+}
+
+function handleEditExamDetail(exam) {
+  const data = {
+    examId: 1,
+    examSeq: exam.examDtlSeq
+  }
+  emit('click:edit', data)
+}
+
+function handleDeleteExamDetail(exam) {
+  const data = {
+    examId: 1,
+    examSeq: exam.examDtlSeq
+  }
+  emit('click:delete', data)
 }
 </script>
 
@@ -83,13 +106,36 @@ function handleExamDetailEdit(e) {
           <span>{{ exam.scores.과학 }}</span>
         </div>
         <div class="col-span-1">
-          <v-btn
-            @click="handleExamDetailEdit"
-            size="small"
-            density="compact"
-            variant="text"
-            icon="mdi-pencil"
-          />
+          <v-menu location="end" transition="none">
+            <template v-slot:activator="{ props }">
+              <div
+                class="mx-2 h-full flex justify-center items-center"
+                :class="[Colors.text.twLight, Colors.text.twBaseHover]"
+                @click="handleExamDetailEditPopup($event, props)"
+              >
+                <v-icon icon="mdi-pencil" size="15" />
+              </div>
+            </template>
+            <div
+              class="p-2 bg-[#ffffff] shadow-all rounded-lg w-[100px] flex flex-col gap-[1px]"
+              :style="{ color: Colors.text.base }"
+            >
+              <div
+                @click="handleEditExamDetail(exam)"
+                class="px-2 py-1 rounded-lg cursor-pointer"
+                :class="Colors.bg.twBaseHover"
+              >
+                <span class="text-left">수정하기</span>
+              </div>
+              <div
+                @click="handleDeleteExamDetail(exam)"
+                class="px-2 py-1 rounded-lg cursor-pointer"
+                :class="Colors.bg.twBaseHover"
+              >
+                <span class="text-left">삭제</span>
+              </div>
+            </div>
+          </v-menu>
         </div>
       </div>
     </div>

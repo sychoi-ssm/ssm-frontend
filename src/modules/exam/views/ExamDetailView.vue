@@ -5,7 +5,8 @@ import { useRoute, useRouter } from 'vue-router'
 
 import { Colors } from '@utils'
 
-import ExamDeleteCard from '../components/ExamDeleteCard.vue'
+import ExamDetailDeleteCard from '../components/ExamDetailDeleteCard.vue'
+import ExamDetailEditCard from '../components/ExamDetailEditCard.vue'
 import ExamDetailResultList from '../components/ExamDetailResultList.vue'
 import ExamDialog from '../components/ExamDialog.vue'
 import ExamReportCard from '../components/ExamReportCard.vue'
@@ -59,7 +60,14 @@ function handleExamDetailItemClick(data) {
   config.data.examReport = data
   openModal('exam-report')
 }
-
+function handleEditExamDetail(data) {
+  config.data.examEdit = data
+  openModal('edit-exam-detail')
+}
+function handleDeleteExamDetail(data) {
+  config.data.examDelete = data
+  openModal('delete-exam-detail')
+}
 function openModal(currentModal) {
   config.modal.current = currentModal
   config.modal.opacity = currentModal === 'exam-report' ? '0.33' : '0'
@@ -118,7 +126,9 @@ function closeModal() {
       <ExamDetailResultList
         v-if="config.menu.current === '학생 성적'"
         :exam-data="examData"
-        @click="(i) => handleExamDetailItemClick(i)"
+        @click:item="(i) => handleExamDetailItemClick(i)"
+        @click:edit="(data) => handleEditExamDetail(data)"
+        @click:delete="(data) => handleDeleteExamDetail(data)"
       />
       <div v-else class="flex justify-center text-neutral-600">
         <div>준비중입니다...</div>
@@ -127,7 +137,16 @@ function closeModal() {
   </div>
   <ExamDialog v-model="config.modal.open" :opacity="config.modal.opacity">
     <ExamReportCard v-if="config.modal.current === 'exam-report'" :data="config.data.examReport" />
-    <ExamDeleteCard v-if="config.modal.current === 'delete-exam-detail'" />
+    <ExamDetailDeleteCard
+      v-if="config.modal.current === 'delete-exam-detail'"
+      @click:close="closeModal"
+      @click:confirm="console.log('삭제')"
+    />
+    <ExamDetailEditCard
+      v-if="config.modal.current === 'edit-exam-detail'"
+      @click:close="closeModal"
+      @click:confirm="console.log('저장')"
+    />
   </ExamDialog>
 </template>
 
