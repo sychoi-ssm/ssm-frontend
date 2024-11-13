@@ -5,7 +5,7 @@ import { useDebounceFn } from '@vueuse/core'
 import FilterChip from './FilterChip.vue'
 
 const props = defineProps({
-  selections: Object,
+  searchConditions: Object,
   filters: Object,
   clearable: Boolean
 })
@@ -13,16 +13,16 @@ const onDeferredUpdateSelection = useDebounceFn(emitUpdateDeferred, 500, { maxWa
 const emit = defineEmits(['update:deferred'])
 
 function emitUpdateDeferred() {
-  emit('update:deferred', props.selections)
+  emit('update:deferred', props.searchConditions)
 }
 
 function handleFilterChipUpdate(filterName, data) {
-  props.selections[filterName] = data
+  props.searchConditions[filterName] = data
   onDeferredUpdateSelection()
 }
 function onClearSelections() {
-  Object.keys(props.selections).forEach((k) => {
-    props.selections[k] = []
+  Object.keys(props.searchConditions).forEach((k) => {
+    props.searchConditions[k] = []
   })
   emitUpdateDeferred()
 }
@@ -32,7 +32,7 @@ function onClearSelections() {
   <div class="min-h-[72px] flex items-start">
     <div class="flex gap-2 flex-wrap items-center">
       <FilterChip
-        :model-value="selections[filter.name]"
+        :model-value="searchConditions[filter.name]"
         @update:model-value="(d) => handleFilterChipUpdate(filter.name, d)"
         v-for="filter in filters"
         :key="filter.title"

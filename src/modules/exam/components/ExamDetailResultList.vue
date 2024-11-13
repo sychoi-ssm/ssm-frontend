@@ -113,7 +113,7 @@ function handleDeleteExamDetail(exam) {
                 :class="[Colors.text.twLight, Colors.text.twBaseHover]"
                 @click="handleExamDetailEditPopup($event, props)"
               >
-                <v-icon icon="mdi-pencil" size="15" />
+                <v-icon icon="mdi-lead-pencil" size="15" />
               </div>
             </template>
             <div

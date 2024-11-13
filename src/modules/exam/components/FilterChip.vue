@@ -64,22 +64,23 @@ const someSelected = computed(() => {
       v-model:selected="settingsSelection"
       @update:selected="(d) => onUpdateModelValue(d)"
       :select-strategy="multiple ? 'leaf' : 'single-leaf'"
-      class="mt-1"
+      class="mt-1 v-list-custom-shadow rounded-lg"
     >
       <v-list-subheader> {{ props.name }}</v-list-subheader>
-      <v-list-item
-        v-for="item in props.items"
-        :key="item.value"
-        :subtitle="item.subtitle"
-        :title="item.title"
-        :value="item"
-      >
-        <template v-if="props.multiple" v-slot:prepend="{ isSelected }">
-          <v-list-item-action start>
-            <v-checkbox-btn :model-value="isSelected"></v-checkbox-btn>
-          </v-list-item-action>
+      <v-list-item v-for="item in props.items" :key="item.value" :value="item">
+        <template #default="{ isSelected }">
+          <div class="flex items-center">
+            <v-checkbox-btn v-if="props.multiple" :model-value="isSelected" density="comfortable" />
+            <span class="ml-1 mr-2">{{ item.title }} </span>
+          </div>
         </template>
       </v-list-item>
     </v-list>
   </v-menu>
 </template>
+
+<style scoped>
+.v-list-custom-shadow {
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.12) !important;
+}
+</style>
