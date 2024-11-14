@@ -87,7 +87,7 @@ const items = [
 <template>
   <div class="student-layout-container">
     <section
-      class="bg-white shadow-neutral-300 shadow-md rounded-lg h-full sm:w-[200px] hidden lg:block"
+      class="bg-white shadow-neutral-300 shadow-all-sm rounded-lg h-full sm:w-[200px] hidden lg:block"
     >
       <StudentSearchList @click="(i) => console.log(i)" />
     </section>
@@ -114,7 +114,7 @@ const items = [
         </div>
         <div class="sm:w-[260px] w-full">
           <div
-            class="bg-white shadow-neutral-300 shadow-md rounded-lg text-sm grow h-full px-4 py-2"
+            class="bg-white shadow-neutral-300 shadow-all-sm rounded-lg text-sm grow h-full px-4 py-2"
           >
             <div class="font-semibold mb-2 text-base">요약</div>
             <div class="mb-3">학생 성적이 성장중이에요</div>
@@ -135,7 +135,7 @@ const items = [
       <div class="h-[260px] flex flex-col sm:flex-row gap-2">
         <div class="flex-1">
           <div
-            class="bg-white shadow-neutral-300 overflow-auto shadow-md rounded-lg text-sm h-full px-4 py-2"
+            class="bg-white shadow-neutral-300 overflow-auto shadow-all-sm rounded-lg text-sm h-full px-4 py-2"
           >
             <div class="font-semibold mb-2 text-base">23년 내신</div>
             <div class="w-[90%]">
@@ -145,7 +145,7 @@ const items = [
         </div>
         <div class="flex-1">
           <div
-            class="bg-white shadow-neutral-300 overflow-auto shadow-md rounded-lg text-sm h-full px-4 py-2"
+            class="bg-white shadow-neutral-300 overflow-auto shadow-all-sm rounded-lg text-sm h-full px-4 py-2"
           >
             <div class="font-semibold mb-2 text-base">23년 모의고사</div>
             <div class="w-[90%]">

@@ -2,9 +2,8 @@
 import { ref } from 'vue'
 
 import { Colors } from '@/alias/utils'
-import { useDebounceFn } from '@vueuse/core'
 
-const emits = defineEmits(['update', 'click:add', 'update:before'])
+const emits = defineEmits(['update'])
 
 const props = defineProps({
   loading: Boolean,
@@ -16,18 +15,8 @@ const props = defineProps({
 
 const searchText = ref('')
 
-const emitUpdate = () => {
-  emits('update', searchText.value)
-}
-const debouncedSearch = useDebounceFn(emitUpdate, props.debounce, { maxWait: 5000 })
-
-const onClickAdd = () => {
-  emits('click:add')
-}
-
 const onSearchTextUpdate = () => {
-  emits('update:before')
-  debouncedSearch()
+  emits('update', searchText.value)
 }
 </script>
 
@@ -44,7 +33,7 @@ const onSearchTextUpdate = () => {
       @update:model-value="onSearchTextUpdate"
       :loading="loading"
     />
-    <v-btn
+    <!-- <v-btn
       @click="onClickAdd"
       variant="flat"
       :color="Colors.bg.primary"
@@ -53,7 +42,7 @@ const onSearchTextUpdate = () => {
       :ripple="false"
     >
       <span>추가하기</span>
-    </v-btn>
+    </v-btn> -->
   </div>
 </template>
 

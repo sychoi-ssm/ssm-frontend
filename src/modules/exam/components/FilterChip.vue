@@ -50,6 +50,7 @@ const someSelected = computed(() => {
         :color="someSelected ? Colors.bg.primaryLight : Colors.bg.base"
         variant="flat"
         @click="settingsMenu.onClick"
+        :ripple="false"
       >
         <span
           class="flex items-center ml-1"
@@ -67,10 +68,10 @@ const someSelected = computed(() => {
       class="mt-1 v-list-custom-shadow rounded-lg"
     >
       <v-list-subheader> {{ props.name }}</v-list-subheader>
-      <v-list-item v-for="item in props.items" :key="item.value" :value="item">
+      <v-list-item density="compact" v-for="item in props.items" :key="item.value" :value="item">
         <template #default="{ isSelected }">
           <div class="flex items-center">
-            <v-checkbox-btn v-if="props.multiple" :model-value="isSelected" density="comfortable" />
+            <v-checkbox-btn v-if="props.multiple" :model-value="isSelected" density="compact" />
             <span class="ml-1 mr-2">{{ item.title }} </span>
           </div>
         </template>

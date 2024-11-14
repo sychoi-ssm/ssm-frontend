@@ -2,6 +2,10 @@
 import { Colors } from '@utils'
 
 const emit = defineEmits(['click:close', 'click:confirm'])
+
+const props = defineProps({
+  loading: Boolean
+})
 </script>
 
 <template>
@@ -17,7 +21,9 @@ const emit = defineEmits(['click:close', 'click:confirm'])
         :ripple="false"
         class="flex-1"
         :color="Colors.bg.light"
+        :class="{ 'disable-events': props.loading }"
         @click="emit('click:close')"
+        :disabled="props.loading"
       >
         <span :style="{ color: Colors.text.base }">닫기</span>
       </v-btn>
@@ -28,6 +34,7 @@ const emit = defineEmits(['click:close', 'click:confirm'])
         class="flex-1"
         :color="Colors.bg.warning"
         @click="emit('click:confirm')"
+        :loading="props.loading"
       >
         삭제
       </v-btn>

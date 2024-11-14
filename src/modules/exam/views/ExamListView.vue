@@ -3,6 +3,8 @@ import { onBeforeUnmount, reactive, ref, watch } from 'vue'
 import { onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
+import { Colors } from '@/alias/utils'
+
 import ExamFilter from '../components/ExamFilter.vue'
 import ExamList from '../components/ExamList.vue'
 import ExamSearchBar from '../components/ExamSearchBar.vue'
@@ -230,12 +232,24 @@ onBeforeUnmount(() => {
       class="mb-2"
       :loading="loading.search"
     />
-    <ExamFilter
-      :searchConditions="searchConditions"
-      :filters="filters"
-      clearable
-      @update:deferred="(f) => onFilterUpdate(f)"
-    />
+    <div class="flex justify-between">
+      <ExamFilter
+        :searchConditions="searchConditions"
+        :filters="filters"
+        clearable
+        @update:deferred="(f) => onFilterUpdate(f)"
+      />
+
+      <v-btn
+        @click="onClickAdd"
+        variant="flat"
+        :color="Colors.bg.primary"
+        height="32"
+        :ripple="false"
+      >
+        <span>추가하기</span>
+      </v-btn>
+    </div>
     <ExamList class="exam-list-container w-full flex flex-col" :exams="exams" />
   </div>
 </template>

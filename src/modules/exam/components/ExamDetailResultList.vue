@@ -22,7 +22,7 @@ function handleEmit(exam) {
 }
 
 function calculateAverage(scores) {
-  const values = Object.values(scores)
+  const values = scores.map((s) => s.value)
   const sum = values.reduce((acc, num) => acc + num, 0)
   const average = sum / values.length
   return Math.round(average * 10) / 10
@@ -36,7 +36,8 @@ function handleExamDetailEditPopup(e, menuProps) {
 function handleEditExamDetail(exam) {
   const data = {
     examId: 1,
-    examSeq: exam.examDtlSeq
+    examSeq: exam.examDtlSeq,
+    scores: exam.scores
   }
   emit('click:edit', data)
 }
@@ -48,6 +49,8 @@ function handleDeleteExamDetail(exam) {
   }
   emit('click:delete', data)
 }
+
+const headers = ['국어', '영어', '수학', '사회', '과학']
 </script>
 
 <template>
@@ -62,12 +65,9 @@ function handleDeleteExamDetail(exam) {
           <span v-if="examData?.results.length > 0"> ・ {{ examData?.results.length }}명</span>
         </div>
         <div class="col-span-2 text-no-wrap">평균</div>
-        <div class="col-span-1 text-no-wrap">국어</div>
-        <div class="col-span-1 text-no-wrap">영어</div>
-        <div class="col-span-1 text-no-wrap">수학</div>
-        <div class="col-span-1 text-no-wrap">사회</div>
-        <div class="col-span-1 text-no-wrap">과학</div>
-        <div class="col-span-1 text-no-wrap"></div>
+        <div v-for="header in headers" :key="header" class="col-span-1 text-no-wrap">
+          {{ header }}
+        </div>
       </div>
     </div>
     <div class="overflow-y-auto scrollbar-gutter-stable grow pt-2">
@@ -90,20 +90,8 @@ function handleDeleteExamDetail(exam) {
         <div class="col-span-2">
           <span>{{ calculateAverage(exam.scores) }}</span>
         </div>
-        <div class="col-span-1">
-          <span>{{ exam.scores.국어 }}</span>
-        </div>
-        <div class="col-span-1">
-          <span>{{ exam.scores.영어 }}</span>
-        </div>
-        <div class="col-span-1">
-          <span>{{ exam.scores.수학 }}</span>
-        </div>
-        <div class="col-span-1">
-          <span>{{ exam.scores.사회 }}</span>
-        </div>
-        <div class="col-span-1">
-          <span>{{ exam.scores.과학 }}</span>
+        <div v-for="score in exam.scores" :key="score.subjectCd" class="col-span-1">
+          <span>{{ score.value }}</span>
         </div>
         <div class="col-span-1">
           <v-menu location="end" transition="none">

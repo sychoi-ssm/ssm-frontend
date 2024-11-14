@@ -1,9 +1,28 @@
 <script setup>
-import { Colors } from '@utils'
+import { reactive } from 'vue'
+import { computed } from 'vue'
+import { ref } from 'vue'
 
+import { Colors } from '@/alias/utils'
+
+const props = defineProps({
+  scores: {
+    type: Array,
+    default: []
+  },
+  loading: Boolean
+})
 const emit = defineEmits(['click:close', 'click:confirm'])
 
-const scores = { 국어: 88, 영어: 87, 수학: 87, 사회: 87, 과학: 87 }
+const innerScores = computed(() =>
+  props.scores.map((s) => {
+    return {
+      subjectCd: s.subjectCd,
+      subjectName: s.subjectName,
+      value: s.value
+    }
+  })
+)
 </script>
 
 <template>
@@ -12,14 +31,15 @@ const scores = { 국어: 88, 영어: 87, 수학: 87, 사회: 87, 과학: 87 }
       김승열 <span class="text-base font-semibold">학생의 성적</span>
     </div>
     <div class="flex gap-1">
-      <div v-for="subject in Object.keys(scores)" :key="subject">
-        <div :style="{ color: Colors.text.hint }">{{ subject }}</div>
+      <div v-for="score in innerScores" :key="score.subjectCd">
+        <div :style="{ color: Colors.text.hint }">{{ score.subjectName }}</div>
         <v-text-field
+          v-model.number="score.value"
           :color="Colors.text.hint"
           variant="outlined"
-          :value="scores[subject]"
           density="compact"
           hide-details
+          :disabled="props.loading"
         />
       </div>
     </div>
@@ -30,9 +50,11 @@ const scores = { 국어: 88, 영어: 87, 수학: 87, 사회: 87, 과학: 87 }
         :ripple="false"
         class="flex-1"
         :color="Colors.bg.light"
+        :class="{ 'disable-events': props.loading }"
         @click="emit('click:close')"
+        :disabled="props.loading"
       >
-        닫기
+        <span :style="{ color: Colors.text.base }">닫기</span>
       </v-btn>
       <v-btn
         flat
@@ -40,7 +62,8 @@ const scores = { 국어: 88, 영어: 87, 수학: 87, 사회: 87, 과학: 87 }
         :ripple="false"
         class="flex-1"
         :color="Colors.bg.primary"
-        @click="emit('click:confirm')"
+        @click="emit('click:confirm', innerScores)"
+        :loading="props.loading"
       >
         저장
       </v-btn>
@@ -48,4 +71,9 @@ const scores = { 국어: 88, 영어: 87, 수학: 87, 사회: 87, 과학: 87 }
   </div>
 </template>
 
-<style scoped></style>
+<style>
+.disable-events.v-btn--disabled.v-btn--variant-elevated {
+  background-color: #e5e8eb !important;
+  color: #e5e8eb !important;
+}
+</style>

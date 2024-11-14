@@ -8,6 +8,8 @@ import { Colors } from '@utils'
 import ExamDetailDeleteCard from '../components/ExamDetailDeleteCard.vue'
 import ExamDetailEditCard from '../components/ExamDetailEditCard.vue'
 import ExamDetailResultList from '../components/ExamDetailResultList.vue'
+import ExamDetailTabGroup from '../components/ExamDetailTabGroup.vue'
+import ExamDetailTitle from '../components/ExamDetailTitle.vue'
 import ExamDialog from '../components/ExamDialog.vue'
 import ExamReportCard from '../components/ExamReportCard.vue'
 import ExamSearchBar from '../components/ExamSearchBar.vue'
@@ -28,16 +30,17 @@ const config = reactive({
     opacity: ref(0.33)
   },
   data: {
-    examReport: ref(null)
+    examReport: ref(null),
+    examEdit: ref(null)
   },
   loading: {
-    search: ref(false)
+    search: ref(false),
+    delete: ref(false),
+    edit: ref(false)
   }
 })
-const setSubMenu = (m) => {
-  config.menu.current = m
-}
-const examData = {
+
+const examData = reactive({
   title: '2024년 고등학교 1학년 내신',
   subtitle: '1학기 중간고사',
   results: [
@@ -45,20 +48,28 @@ const examData = {
       examDtlSeq: 1,
       name: '김승열',
       class: '가평고1',
-      scores: { 국어: 88, 영어: 87, 수학: 87, 사회: 87, 과학: 87 }
+      scores: [
+        { subjectCd: '01', subjectName: '국어', value: 88 },
+        { subjectCd: '01', subjectName: '영어', value: 87 },
+        { subjectCd: '01', subjectName: '수학', value: 87 },
+        { subjectCd: '01', subjectName: '사회', value: 87 },
+        { subjectCd: '01', subjectName: '과학', value: 87 }
+      ]
     },
     {
       examDtlSeq: 2,
       name: '김승열',
       class: '가평고1',
-      scores: { 국어: 88, 영어: 87, 수학: 87, 사회: 87, 과학: 87 }
+      scores: [
+        { subjectCd: '01', subjectName: '국어', value: 88 },
+        { subjectCd: '01', subjectName: '영어', value: 87 },
+        { subjectCd: '01', subjectName: '수학', value: 87 },
+        { subjectCd: '01', subjectName: '사회', value: 87 },
+        { subjectCd: '01', subjectName: '과학', value: 87 }
+      ]
     }
   ]
-}
-
-function historyBack() {
-  router.go(-1)
-}
+})
 
 function handleExamDetailItemClick(data) {
   config.data.examReport = data
@@ -66,6 +77,7 @@ function handleExamDetailItemClick(data) {
 }
 function handleEditExamDetail(data) {
   config.data.examEdit = data
+  console.log(config.data.examEdit)
   openModal('edit-exam-detail')
 }
 function handleDeleteExamDetail(data) {
@@ -97,58 +109,42 @@ function onSearchTextUpdate() {
     config.loading.search = false
   }, 1000)
 }
+
+function onConfirmEdit(data) {
+  console.log(data)
+  config.loading.edit = true
+  setTimeout(() => {
+    config.loading.edit = false
+    config.data.examData = data
+    closeModal()
+  }, 1000)
+}
+
+function onConfirmDelete(data) {
+  console.log('삭제!')
+  config.loading.delete = true
+  setTimeout(() => {
+    config.loading.delete = false
+    closeModal()
+  }, 1000)
+}
 </script>
 
 <template>
-  <div class="flex flex-col w-full pr-4 max-w-[720px] gap-3">
+  <div class="flex flex-col w-full pr-4 max-w-[720px] gap-2">
     <section class="min-h-[58px]">
-      <div class="flex justify-between items-center">
-        <span class="text-2xl font-semibold" :style="{ color: Colors.text.strong }">
-          {{ examData.title }}
-        </span>
-        <span>
-          <v-btn
-            density="compact"
-            icon="mdi-arrow-left"
-            variant="text"
-            :ripple="false"
-            :color="Colors.text.hint"
-            @click="historyBack()"
-          />
-        </span>
-      </div>
-      <div class="text-base" :style="{ color: Colors.text.base }">{{ examData.subtitle }}</div>
+      <ExamDetailTitle :title="examData.title" :subtitle="examData.subtitle" />
+    </section>
+    <section class="min-h-[32px] mb-3">
+      <ExamDetailTabGroup v-model="config.menu.current" :items="config.menu.items" />
     </section>
     <section>
       <ExamSearchBar
         @update:before="onBeforeSearchUpdate"
         @update="(searchText) => onSearchTextUpdate(searchText)"
         @click:add="onClickAddNew"
-        class="mb-2"
         :loading="config.loading.search"
       />
-    </section>
-    <section class="min-h-[32px]">
-      <div class="flex gap-1">
-        <v-chip
-          v-for="subMenu in config.menu.items"
-          :key="subMenu"
-          class="cursor-pointer"
-          :color="subMenu === config.menu.current ? Colors.bg.base : 'transparent'"
-          variant="flat"
-          @click="setSubMenu(subMenu)"
-          :ripple="false"
-        >
-          <span
-            class="flex items-center"
-            :style="{
-              color: subMenu === config.menu.current ? Colors.text.base : Colors.text.base
-            }"
-          >
-            {{ subMenu }}
-          </span>
-        </v-chip>
-      </div>
     </section>
     <section class="mt-3">
       <ExamDetailResultList
@@ -168,12 +164,15 @@ function onSearchTextUpdate() {
     <ExamDetailDeleteCard
       v-if="config.modal.current === 'delete-exam-detail'"
       @click:close="closeModal"
-      @click:confirm="console.log('삭제')"
+      @click:confirm="onConfirmDelete"
+      :loading="config.loading.delete"
     />
     <ExamDetailEditCard
       v-if="config.modal.current === 'edit-exam-detail'"
+      :scores="config.data.examEdit?.scores"
       @click:close="closeModal"
-      @click:confirm="console.log('저장')"
+      @click:confirm="onConfirmEdit"
+      :loading="config.loading.edit"
     />
   </ExamDialog>
 </template>
