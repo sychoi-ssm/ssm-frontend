@@ -1,9 +1,9 @@
 <script setup>
-import { onBeforeUnmount, reactive, ref, watch } from 'vue'
-import { onMounted } from 'vue'
+import { onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { Colors } from '@/alias/utils'
+import { useDebounceFn } from '@vueuse/core'
 
 import ExamFilter from '../components/ExamFilter.vue'
 import ExamList from '../components/ExamList.vue'
@@ -102,15 +102,18 @@ const searchConditions = reactive({
 })
 
 function onFilterUpdate() {
-  pushRouteQuery()
-  search()
+  loading.search = true
+  console.log('준비')
+  deferredSearch()
 }
 
 function pushRouteQuery() {
   // filters를 query로 변환 후 주소 이동
   const query = {}
   Object.keys(searchConditions).forEach((k) => {
-    if (searchConditions[k]?.length > 0) {
+    if (typeof searchConditions[k] === 'string') {
+      query[k] = searchConditions[k]
+    } else if (searchConditions[k]?.length > 0) {
       // filter가 있다면, value를 추출 ex) { title: '2021년', value: '2021' }
       query[k] = searchConditions[k].map((v) => v.value)
     }
@@ -125,7 +128,9 @@ function parseRouteQuery(query) {
   // query에서 filter 추출. query값을 기반으로 selection 저장
   // selection은 subset of filters.data
   Object.keys(searchConditions).forEach((k) => {
-    if (k in query) {
+    if (k === 'searchText') {
+      searchConditions[k] = query[k]
+    } else if (k in query) {
       searchConditions[k] = filters[k].data.filter((f) => query[k].includes(f.value))
     } else {
       searchConditions[k] = []
@@ -134,8 +139,10 @@ function parseRouteQuery(query) {
 }
 
 function onSearchTextUpdate(searchText) {
+  loading.search = true
+  console.log('준비')
   searchConditions.searchText = searchText
-  search()
+  deferredSearch()
 }
 function onClickAddNew() {
   console.log('추가하기!')
@@ -146,10 +153,12 @@ function onBeforeSearchUpdate() {
   loading.search = true
 }
 
+const deferredSearch = useDebounceFn(pushRouteQuery, 1000, { maxWait: 10000 })
+
 function search() {
-  loading.search = true
+  console.log('검색시작!!')
   setTimeout(() => {
-    console.log('검색 완료')
+    console.log('검색끝!!')
     exams.value = [
       {
         name: '2024년 고등학교 1학년 1학기 중간 내신',
@@ -226,9 +235,8 @@ onBeforeUnmount(() => {
   <div class="flex flex-col w-full pr-4 max-w-[720px]">
     <div class="h-[36px] text-2xl font-semibold mb-3">시험 목록</div>
     <ExamSearchBar
-      @update:before="onBeforeSearchUpdate"
+      v-model="searchConditions.searchText"
       @update="(searchText) => onSearchTextUpdate(searchText)"
-      @click:add="onClickAddNew"
       class="mb-2"
       :loading="loading.search"
     />
@@ -237,11 +245,11 @@ onBeforeUnmount(() => {
         :searchConditions="searchConditions"
         :filters="filters"
         clearable
-        @update:deferred="(f) => onFilterUpdate(f)"
+        @update="(f) => onFilterUpdate(f)"
       />
 
       <v-btn
-        @click="onClickAdd"
+        @click="onClickAddNew"
         variant="flat"
         :color="Colors.bg.primary"
         height="32"

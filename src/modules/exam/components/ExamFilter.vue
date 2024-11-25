@@ -1,6 +1,5 @@
 <script setup>
 import { Colors } from '@/modules/common/utils'
-import { useDebounceFn } from '@vueuse/core'
 
 import FilterChip from './FilterChip.vue'
 
@@ -9,22 +8,21 @@ const props = defineProps({
   filters: Object,
   clearable: Boolean
 })
-const onDeferredUpdateSelection = useDebounceFn(emitUpdateDeferred, 500, { maxWait: 3000 })
-const emit = defineEmits(['update:deferred'])
+const emit = defineEmits(['update'])
 
-function emitUpdateDeferred() {
-  emit('update:deferred', props.searchConditions)
+function emitUpdate() {
+  emit('update', props.searchConditions)
 }
 
 function handleFilterChipUpdate(filterName, data) {
   props.searchConditions[filterName] = data
-  onDeferredUpdateSelection()
+  emitUpdate()
 }
 function onClearSelections() {
   Object.keys(props.searchConditions).forEach((k) => {
     props.searchConditions[k] = []
   })
-  emitUpdateDeferred()
+  emitUpdate()
 }
 </script>
 

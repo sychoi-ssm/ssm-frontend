@@ -89,7 +89,7 @@ const items = [
     <section
       class="bg-white shadow-neutral-300 shadow-all-sm rounded-lg h-full sm:w-[200px] hidden lg:block"
     >
-      <StudentSearchList @click="(i) => console.log(i)" />
+      <StudentSearchList @change="(i) => console.log(i)" />
     </section>
     <!--    <div class="grow">-->
     <div class="grow flex flex-col gap-2">

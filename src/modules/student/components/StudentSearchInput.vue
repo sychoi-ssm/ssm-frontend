@@ -1,11 +1,6 @@
-<script setup>
-import { ref } from 'vue'
-
-const input = ref('')
-</script>
+<script setup></script>
 <template>
   <v-text-field
-    v-model="input"
     hide-details
     variant="solo"
     placeholder="이름 또는 학교"
